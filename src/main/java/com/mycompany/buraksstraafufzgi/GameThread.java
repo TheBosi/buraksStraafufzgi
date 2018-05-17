@@ -7,6 +7,7 @@ package com.mycompany.buraksstraafufzgi;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,8 @@ import sun.io.Win32ErrorMode;
  */
 public class GameThread extends JPanel implements Commons {
 
+    
+    private KeyboardListener listener = new KeyboardListener();
     /**
      * @param args the command line arguments
      */
@@ -45,7 +48,7 @@ public class GameThread extends JPanel implements Commons {
         frame.setSize(width, height);
 
         frame.add(this);
-
+        frame.addKeyListener(listener);
         initialize();
         startGame();
 
@@ -56,11 +59,23 @@ public class GameThread extends JPanel implements Commons {
                 .newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(new Runnable() {
             public void run() {
+                listenKeys();
                 repaint();
             }
         }, 0, 1000 / Commons.FPS, TimeUnit.MILLISECONDS);
     }
-
+    
+    private void listenKeys(){
+        
+        if(listener.isKeyPressed(KeyEvent.VK_SPACE)){
+            System.out.println("Space");
+        }
+        
+        if(listener.isKeyPressed(KeyEvent.VK_W)){
+            System.out.println("W");
+        }
+    }
+    
     private void initialize() {
 
     }
@@ -71,7 +86,10 @@ public class GameThread extends JPanel implements Commons {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.fillRect(0, 0, 20, 20);
+        //g2d.fillRect(630, 350, 20, 20);
+        g2d.fillOval(630, 350, 100, 100);
+        g2d.fillOval(540, 350, 100, 100);
+        g2d.fillRoundRect(585, 100, 100, 300, 150, 150);
     }
 
 }
