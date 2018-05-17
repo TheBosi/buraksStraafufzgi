@@ -13,4 +13,6 @@ public interface Commons {
     
     int width = 1280;
     int height = 720;
+    
+    int FPS = 60;
 }
