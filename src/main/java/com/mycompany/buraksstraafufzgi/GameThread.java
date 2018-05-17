@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -22,8 +23,9 @@ import sun.io.Win32ErrorMode;
  */
 public class GameThread extends JPanel implements Commons {
 
-    
     private KeyboardListener listener = new KeyboardListener();
+    private Player player;
+
     /**
      * @param args the command line arguments
      */
@@ -39,6 +41,12 @@ public class GameThread extends JPanel implements Commons {
     }
 
     public GameThread() {
+        
+        JFrame tmp = new JFrame();
+        tmp.pack();
+        
+        
+        
         JFrame frame = new JFrame();
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,20 +72,31 @@ public class GameThread extends JPanel implements Commons {
             }
         }, 0, 1000 / Commons.FPS, TimeUnit.MILLISECONDS);
     }
-    
-    private void listenKeys(){
-        
-        if(listener.isKeyPressed(KeyEvent.VK_SPACE)){
-            System.out.println("Space");
-        }
-        
-        if(listener.isKeyPressed(KeyEvent.VK_W)){
-            System.out.println("W");
-        }
-    }
-    
-    private void initialize() {
 
+    private void listenKeys() {
+
+        if (listener.isKeyPressed(KeyEvent.VK_W)) {
+            player.setY(player.getY() - 10);
+        }
+
+        if (listener.isKeyPressed(KeyEvent.VK_A)) {
+           player.setX(player.getX() - 10 );
+        }
+        
+        if(listener.isKeyPressed(KeyEvent.VK_S)){
+            player.setY(player.getY() + 10);
+        }
+        
+        if(listener.isKeyPressed(KeyEvent.VK_D)){
+            player.setX(player.getX() + 10);
+        }
+        
+        
+    }
+
+    private void initialize() {
+        player = new Player(0, 0);
+        player.setImageIcon(new ImageIcon(this.getClass().getResource("/giratina.png")));
     }
 
     @Override
@@ -86,10 +105,7 @@ public class GameThread extends JPanel implements Commons {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        //g2d.fillRect(630, 350, 20, 20);
-        g2d.fillOval(630, 350, 100, 100);
-        g2d.fillOval(540, 350, 100, 100);
-        g2d.fillRoundRect(585, 100, 100, 300, 150, 150);
+        g2d.drawImage(player.getImageIcon().getImage(), player.getX(), player.getY(), null);
     }
 
 }
